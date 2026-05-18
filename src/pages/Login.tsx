@@ -250,7 +250,7 @@ export const Login = () => {
               disabled={loading}
               className="w-full bg-white text-black hover:bg-cyan-50 h-12 rounded-xl text-sm font-bold transition-all shadow-lg shadow-white/5 flex items-center justify-center gap-3"
             >
-              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/layout/google.svg" alt="Google" className="w-5 h-5" />
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/google/google-original.svg" alt="Google" className="w-5 h-5" />
               Google orqali kirish
             </Button>
 
