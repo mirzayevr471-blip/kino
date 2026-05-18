@@ -1,0 +1,87 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User profile data including preferences, watchlist and roles",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "role": { "type": "string", "enum": ["super", "editor", "user"] },
+        "watchlist": { "type": "array" },
+        "subscription": { "type": "string", "enum": ["free", "basic", "premium"] },
+        "language": { "type": "string", "enum": ["en", "uz", "ru"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Movie": {
+      "title": "Movie Metadata",
+      "description": "Core data for films and series",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "thumbnail": { "type": "string" },
+        "banner": { "type": "string" },
+        "genre": { "type": "array" },
+        "rating": { "type": "number" },
+        "year": { "type": "number" },
+        "videoUrl": { "type": "string" },
+        "category": { "type": "string", "enum": ["movie", "series", "anime", "drama", "cartoons"] },
+        "accessTier": { "type": "string", "enum": ["free", "standard", "premium"] },
+        "isSeries": { "type": "boolean" },
+        "totalSeasons": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Episode": {
+      "title": "Episode",
+      "description": "Individual episode metadata for series and anime",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "episodeNumber": { "type": "number" },
+        "seasonNumber": { "type": "number" },
+        "videoUrl": { "type": "string" },
+        "thumbnail": { "type": "string" },
+        "duration": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Plan": {
+      "title": "Subscription Plan",
+      "description": "Subscription tier details and pricing",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "price": { "type": "number" },
+        "features": { "type": "array" },
+        "isPopular": { "type": "boolean" },
+        "order": { "type": "number" }
+      }
+    },
+    "AppSettings": {
+      "title": "Application Settings",
+      "description": "Global application configuration like maintenance mode",
+      "type": "object",
+      "properties": {
+        "maintenanceMode": { "type": "boolean" },
+        "siteName": { "type": "string" },
+        "siteDescription": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  },
+  "firestore": {
+    "users": { "schema": "User", "description": "Global users collection" },
+    "movies": { "schema": "Movie", "description": "Global movie library" },
+    "movies/{movieId}/episodes": { "schema": "Episode", "description": "Episodes for a specific movie or series" },
+    "plans": { "schema": "Plan", "description": "Subscription tiers" },
+    "settings": { "schema": "AppSettings", "description": "Global site settings" }
+  }
+}

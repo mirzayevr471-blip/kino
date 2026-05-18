@@ -1,0 +1,8 @@
+{
+  "name": "KinoHub.uz",
+  "description": "A premium cinematic movie streaming platform with AI recommendations, real-time trending, and multi-language support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

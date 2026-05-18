@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 0. Global Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper Primitives
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isPlatformOwner() {
+      return isSignedIn() && request.auth.token.email == 'mirzayevr471@gmail.com' && request.auth.token.email_verified == true;
+    }
+
+    function isSuperAdmin() {
+      return isPlatformOwner() || (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserData().get('role', 'user') == 'super');
+    }
+
+    function isEditor() {
+      return exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserData().get('role', 'user') == 'editor';
+    }
+
+    function isAdmin() { 
+      return isSuperAdmin() || isEditor();
+    }
+
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isSuperAdmin();
+      allow create: if isOwner(userId);
+      allow update: if (isOwner(userId) && !incoming().diff(existing()).affectedKeys().hasAny(['role'])) || isSuperAdmin();
+      allow delete: if isSuperAdmin();
+    }
+
+    match /movies/{movieId} {
+      allow read, list: if true;
+      allow write: if isAdmin();
+
+      match /episodes/{episodeId} {
+        allow read, list: if true;
+        allow write: if isAdmin();
+      }
+    }
+
+    match /plans/{planId} {
+      allow read, list: if true;
+      allow write: if isPlatformOwner();
+    }
+
+    match /settings/{settingId} {
+      allow read, list: if true;
+      allow write: if isSuperAdmin();
+    }
+  }
+}
